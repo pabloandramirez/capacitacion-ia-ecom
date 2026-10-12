@@ -1,0 +1,63 @@
+{% extends "plomeros/base.html" %}
+
+{% block title %}{{ titulo }}{% endblock %}
+{% block heading %}{{ titulo }}{% endblock %}
+
+{% block lead %}
+<p class="lede">{{ bajada }}</p>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn--ghost" href="{% url 'plomeros:list' %}">Volver al registro</a>
+{% endblock %}
+
+{% block content %}
+<main id="contenido" class="wrap">
+  <form method="post" class="form" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="form__alert">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="form__grid">
+      <div class="field">
+        <label for="{{ form.sucursal.id_for_label }}">{{ form.sucursal.label }}</label>
+        {{ form.sucursal }}
+        {% if form.sucursal.errors %}<p class="field__error">{{ form.sucursal.errors|striptags }}</p>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.cuil.id_for_label }}">{{ form.cuil.label }}</label>
+        {{ form.cuil }}
+        {% if form.cuil.errors %}<p class="field__error">{{ form.cuil.errors|striptags }}</p>{% endif %}
+      </div>
+
+      <div class="field field--wide">
+        <label for="{{ form.nombre.id_for_label }}">{{ form.nombre.label }}</label>
+        {{ form.nombre }}
+        {% if form.nombre.errors %}<p class="field__error">{{ form.nombre.errors|striptags }}</p>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.desde.id_for_label }}">{{ form.desde.label }}</label>
+        {{ form.desde }}
+        <p class="field__help">Opcional. Se completa con la fecha de hoy al dar de alta.</p>
+        {% if form.desde.errors %}<p class="field__error">{{ form.desde.errors|striptags }}</p>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.hasta.id_for_label }}">{{ form.hasta.label }}</label>
+        {{ form.hasta }}
+        <p class="field__help">Opcional. Vacío equivale a sin vencimiento.</p>
+        {% if form.hasta.errors %}<p class="field__error">{{ form.hasta.errors|striptags }}</p>{% endif %}
+      </div>
+    </div>
+
+    <div class="form__actions">
+      <a class="btn btn--ghost" href="{% url 'plomeros:list' %}">Cancelar</a>
+      <button class="btn btn--primary" type="submit">{{ accion }}</button>
+    </div>
+  </form>
+</main>
+{% endblock %}

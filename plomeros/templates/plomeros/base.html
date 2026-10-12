@@ -1,0 +1,41 @@
+<!doctype html>
+{% load static %}
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Registro de Plomeros{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'plomeros/css/app.css' %}">
+</head>
+<body>
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="topbar__lead">
+        <p class="brand">Ecom Chaco</p>
+        <h1 class="title">{% block heading %}Registro de Plomeros{% endblock %}</h1>
+        {% block lead %}{% endblock %}
+      </div>
+      <div class="topbar__actions">{% block actions %}{% endblock %}</div>
+    </div>
+  </header>
+
+  {% if messages %}
+  <div class="wrap wrap--flush">
+    <ul class="messages">
+      {% for m in messages %}
+      <li class="messages__item messages__item--{{ m.tags }}">{{ m }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% block content %}{% endblock %}
+
+  <footer class="site-foot">Ecom Chaco S. A. — Registro de plomeros</footer>
+</body>
+</html>

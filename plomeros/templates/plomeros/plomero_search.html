@@ -1,0 +1,77 @@
+{% extends "plomeros/base.html" %}
+
+{% block title %}Buscar plomeros{% endblock %}
+{% block heading %}Buscar plomeros{% endblock %}
+
+{% block lead %}
+<p class="lede">Filtrá el registro y seleccioná un plomero.</p>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn--ghost" href="{% url 'plomeros:list' %}">Volver al registro</a>
+{% endblock %}
+
+{% block content %}
+<main id="contenido" class="wrap">
+  <form method="get" class="form form--filters" novalidate>
+    <div class="filters__grid">
+      {% for field in form %}
+      <div class="field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<p class="field__help">{{ field.help_text }}</p>{% endif %}
+        {% if field.errors %}<p class="field__error">{{ field.errors|striptags }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="filters__actions">
+      <a class="btn btn--ghost" href="{% url 'plomeros:search' %}">Limpiar</a>
+      <button class="btn btn--primary" type="submit">Buscar</button>
+    </div>
+  </form>
+
+  <div class="results-head">
+    <h2>Resultados</h2>
+    <span class="count">{{ coincidencias }} plomero{{ coincidencias|pluralize }}</span>
+  </div>
+
+  <div class="tablewrap">
+    <table class="registry">
+      <caption class="sr-only">Resultados de búsqueda ordenados por sucursal y CUIL</caption>
+      <thead>
+        <tr>
+          <th scope="col">CUIL</th>
+          <th scope="col">Apellido y nombre</th>
+          <th scope="col">Vigencia desde</th>
+          <th scope="col">Vigencia hasta</th>
+          <th scope="col">Estado</th>
+          <th scope="col" class="ta-end">Selección</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in resultados %}
+        <tr>
+          <td class="num">{{ p.cuil_formateado }}</td>
+          <td class="name">{{ p.nombre }}</td>
+          <td>{{ p.desde|date:"d/m/Y"|default:"—" }}</td>
+          <td>{{ p.hasta|date:"d/m/Y"|default:"—" }}</td>
+          <td>
+            <span class="vig is-{{ p.estado_vigencia }}">
+              <span class="vig__bar"><span class="vig__fill" style="width: {{ p.vigencia_pct }}%"></span></span>
+              <span class="vig__label">{{ p.estado_label }}</span>
+            </span>
+          </td>
+          <td class="ta-end ops">
+            <a href="{% url 'plomeros:update' p.pk %}">Seleccionar</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="empty">No hay coincidencias con los filtros.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock %}

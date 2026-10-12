@@ -1,0 +1,66 @@
+{% extends "plomeros/base.html" %}
+
+{% block title %}Registro de Plomeros{% endblock %}
+{% block heading %}Registro de Plomeros{% endblock %}
+
+{% block lead %}
+<dl class="stats">
+  <div class="stats__item">
+    <dt>Plomeros</dt>
+    <dd>{{ total }}</dd>
+  </div>
+  <div class="stats__item">
+    <dt>Sucursal</dt>
+    <dd>{{ sucursal }}</dd>
+  </div>
+</dl>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn--ghost" href="{% url 'plomeros:search' %}">Buscar</a>
+<a class="btn btn--primary" href="{% url 'plomeros:create' %}">Alta de plomero</a>
+{% endblock %}
+
+{% block content %}
+<main id="contenido" class="wrap">
+  <div class="tablewrap">
+    <table class="registry">
+      <caption class="sr-only">Plomeros habilitados ordenados por sucursal y CUIL</caption>
+      <thead>
+        <tr>
+          <th scope="col">CUIL</th>
+          <th scope="col">Apellido y nombre</th>
+          <th scope="col">Vigencia desde</th>
+          <th scope="col">Vigencia hasta</th>
+          <th scope="col">Estado</th>
+          <th scope="col" class="ta-end">Operación</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in plomeros %}
+        <tr>
+          <td class="num">{{ p.cuil_formateado }}</td>
+          <td class="name">{{ p.nombre }}</td>
+          <td>{{ p.desde|date:"d/m/Y"|default:"—" }}</td>
+          <td>{{ p.hasta|date:"d/m/Y"|default:"—" }}</td>
+          <td>
+            <span class="vig is-{{ p.estado_vigencia }}">
+              <span class="vig__bar"><span class="vig__fill" style="width: {{ p.vigencia_pct }}%"></span></span>
+              <span class="vig__label">{{ p.estado_label }}</span>
+            </span>
+          </td>
+          <td class="ta-end ops">
+            <a href="{% url 'plomeros:update' p.pk %}">Modificar</a>
+            <a href="{% url 'plomeros:delete' p.pk %}" class="danger">Baja</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="empty">No hay plomeros cargados.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock %}

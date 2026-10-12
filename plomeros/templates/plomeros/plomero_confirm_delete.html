@@ -1,0 +1,35 @@
+{% extends "plomeros/base.html" %}
+
+{% block title %}Eliminar plomero{% endblock %}
+{% block heading %}Eliminar plomero{% endblock %}
+
+{% block lead %}
+<p class="lede">Esta acción quita el plomero del registro y no se puede deshacer.</p>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn--ghost" href="{% url 'plomeros:list' %}">Cancelar</a>
+{% endblock %}
+
+{% block content %}
+<main id="contenido" class="wrap">
+  <div class="confirm">
+    <p class="confirm__lead">Se va a eliminar:</p>
+    <dl class="identity">
+      <div><dt>CUIL</dt><dd class="num">{{ object.cuil_formateado }}</dd></div>
+      <div><dt>Apellido y nombre</dt><dd>{{ object.nombre }}</dd></div>
+      <div><dt>Sucursal</dt><dd>{{ object.sucursal }}</dd></div>
+      <div><dt>Vigencia desde</dt><dd>{{ object.desde|date:"d/m/Y"|default:"—" }}</dd></div>
+      <div><dt>Vigencia hasta</dt><dd>{{ object.hasta|date:"d/m/Y"|default:"—" }}</dd></div>
+    </dl>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="form__actions">
+        <a class="btn btn--ghost" href="{% url 'plomeros:list' %}">Cancelar</a>
+        <button class="btn btn--danger" type="submit">Eliminar plomero</button>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}
